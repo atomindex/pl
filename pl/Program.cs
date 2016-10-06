@@ -9,7 +9,7 @@ namespace pl {
     class Program {
         static void Main(string[] args) {
 
-            string input = "2 + 2 * 4";
+            string input = "2 + 2 * --4";
             Lexer lexer = new Lexer(input);
             List<Token> tokens = lexer.Tokenize();
 

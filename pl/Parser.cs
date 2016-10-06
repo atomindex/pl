@@ -78,14 +78,29 @@ namespace pl {
                 }
 
                 break;
-
             }
 
             return expressionLeft;
         }
 
         private Expression unary() {
-            return primary();
+            Expression expression;
+
+            switch (peek(0).Type) {
+                case TokenType.Minus:
+                    pos++;
+                    expression = new UnaryExpression('-', unary());
+                    break;
+                case TokenType.Plus:
+                    pos++;
+                    expression = new UnaryExpression('+', unary());
+                    break;
+                default:
+                    expression = primary();
+                    break;
+            }
+
+            return expression;
         }
 
         private Expression primary() {

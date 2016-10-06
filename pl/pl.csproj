@@ -44,6 +44,7 @@
     <Compile Include="Expressions\BinaryExpression.cs" />
     <Compile Include="Expressions\Expression.cs" />
     <Compile Include="Expressions\NumberExpression.cs" />
+    <Compile Include="Expressions\UnaryExpression.cs" />
     <Compile Include="Lexer.cs" />
     <Compile Include="Parser.cs" />
     <Compile Include="Program.cs" />
