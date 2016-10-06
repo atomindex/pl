@@ -54,10 +54,26 @@ namespace pl {
         private void tokenizeNumber() {
             StringBuilder sb = new StringBuilder();
 
-            char currentChar = peek(0);
-            while (char.IsDigit(currentChar)) {
-                sb.Append(currentChar);
-                currentChar = next();
+            
+            bool hasDot = false;
+            while (true) {
+                char currentChar = peek(0);
+
+                if (currentChar == '.') {
+                    if (hasDot) {
+                        //TODO exception
+                    } else {
+                        if (sb.Length == 0)
+                            sb.Append('0');
+                        sb.Append(currentChar);
+                        hasDot = true;
+                    }
+                } else if (char.IsDigit(currentChar)) {
+                    sb.Append(currentChar);
+                } else 
+                    break;
+
+                pos++;
             }
 
             addToken(TokenType.Number, sb.ToString());
