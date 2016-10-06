@@ -1,0 +1,6 @@
+c:\users\atom\documents\visual studio 2013\Projects\pl\pl\bin\Debug\pl.exe.config
+c:\users\atom\documents\visual studio 2013\Projects\pl\pl\bin\Debug\pl.exe
+c:\users\atom\documents\visual studio 2013\Projects\pl\pl\bin\Debug\pl.pdb
+c:\users\atom\documents\visual studio 2013\Projects\pl\pl\obj\Debug\pl.csprojResolveAssemblyReference.cache
+c:\users\atom\documents\visual studio 2013\Projects\pl\pl\obj\Debug\pl.exe
+c:\users\atom\documents\visual studio 2013\Projects\pl\pl\obj\Debug\pl.pdb
