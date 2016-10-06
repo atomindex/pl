@@ -18,7 +18,8 @@ namespace pl {
         LParen,
         RParen,
 
-        EOF
+        Print,
 
+        EOF
     }
 }

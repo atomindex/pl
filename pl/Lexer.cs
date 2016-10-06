@@ -95,7 +95,16 @@ namespace pl {
                 currentChar = peek(0);
             }
 
-            addToken(TokenType.Word, sb.ToString());
+            string word = sb.ToString();
+
+            switch (word) {
+                case "print":
+                    addToken(TokenType.Print);
+                    break;
+                default:
+                    addToken(TokenType.Word, word);
+                    break;
+            }
         }
 
         private void tokenizeOperator() {

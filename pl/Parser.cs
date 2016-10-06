@@ -8,20 +8,13 @@ using System.Threading.Tasks;
 
 namespace pl {
     class Parser {
+        private ExpressionParser expressionParser;
+        private ParserData parserData;
 
-        private static Token tokenEOF;
-
-        private List<Token> tokens;
-        private int length;
-        private int pos;
-
-        static Parser() {
-            tokenEOF = new Token(TokenType.EOF, "");
-        }
 
         public Parser(List<Token> tokens) {
-            this.tokens = tokens;
-            length = tokens.Count;
+            parserData = new ParserData(tokens);
+            expressionParser = new ExpressionParser(parserData);
         }
 
         public List<Statement> Parse() {
@@ -35,7 +28,11 @@ namespace pl {
         }
 
         private Statement statement() {
-            return assigmentStatement();
+            if (peek(0).Type == TokenType.Print) {
+                next();
+                return new PrintStatement(expressionParser.Parse());
+            } else
+                return assigmentStatement();
         }
 
         private Statement assigmentStatement() {
@@ -43,112 +40,20 @@ namespace pl {
 
             if (currentToken.Type == TokenType.Word && peek(1).Type == TokenType.Eq) {
                 string variableName = currentToken.Text;
-                pos += 2;
-                Expression variableExpression = expression();
+                next(2);
+                Expression variableExpression = expressionParser.Parse();
                 return new AssigmentStatement(variableName, variableExpression);
             }
 
             return null;
         }
 
-        private Expression expression() {
-            return additive();
+        private Token peek(int relativePos) {
+            return parserData.Peek(relativePos);
         }
 
-        private Expression additive() {
-            Expression expressionLeft = multiplicative();
-
-            while (true) {
-
-                switch (peek(0).Type) {
-                    case TokenType.Plus:
-                        pos++;
-                        expressionLeft = new BinaryExpression('+', expressionLeft, multiplicative());
-                        continue;
-                    case TokenType.Minus:
-                        pos++;
-                        expressionLeft = new BinaryExpression('-', expressionLeft, multiplicative());
-                        continue;
-                }
-
-                break;
-
-            }
-
-            return expressionLeft;
-        }
-
-        private Expression multiplicative() {
-            Expression expressionLeft = unary();
-
-            while (true) {
-
-                switch (peek(0).Type) {
-                    case TokenType.Star:
-                        pos++;
-                        expressionLeft = new BinaryExpression('*', expressionLeft, unary());
-                        continue;
-                    case TokenType.Slash:
-                        pos++;
-                        expressionLeft = new BinaryExpression('/', expressionLeft, unary());
-                        continue;
-                }
-
-                break;
-            }
-
-            return expressionLeft;
-        }
-
-        private Expression unary() {
-            Expression expression;
-
-            switch (peek(0).Type) {
-                case TokenType.Minus:
-                    pos++;
-                    expression = new UnaryExpression('-', unary());
-                    break;
-                case TokenType.Plus:
-                    pos++;
-                    expression = new UnaryExpression('+', unary());
-                    break;
-                default:
-                    expression = primary();
-                    break;
-            }
-
-            return expression;
-        }
-
-        private Expression primary() {
-            Token currentToken = peek(0);
-
-            switch (currentToken.Type) {
-                case TokenType.Number:
-                    pos++;
-                    return new NumberExpression(Double.Parse(currentToken.Text));
-                case TokenType.LParen:
-                    pos++;
-                    Expression subExpression = expression();
-                    
-                    //TODO exception
-                    //if (peek(0).Type != TokenType.RParen)
-                    pos++;
-
-                    return subExpression;
-                case TokenType.Word:
-                    pos++;
-                    return new VariableExpression(currentToken.Text);
-            }
-
-            //TODO Exception
-            return null;
-        }
-
-        private Token peek(int relativePosition) {
-            int position = pos + relativePosition;
-            if (position >= length) return tokenEOF;
-            return tokens[position];
+        private void next(int value = 1) {
+            parserData.Pos += value;
         }
 
     }
