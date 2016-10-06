@@ -16,12 +16,14 @@ namespace pl {
         private int pos;
 
         static Lexer() {
-            operators = "+-*/";
+            operators = "+-*/()";
             operatorsTokenTypes = new TokenType[] {
                 TokenType.Plus,
                 TokenType.Minus,
                 TokenType.Star,
-                TokenType.Slash
+                TokenType.Slash,
+                TokenType.LParen,
+                TokenType.RParen
             };
         }
 

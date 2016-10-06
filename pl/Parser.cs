@@ -105,10 +105,22 @@ namespace pl {
 
         private Expression primary() {
             Token currentToken = peek(0);
-            if (currentToken.Type == TokenType.Number) {
-                pos++;
-                return new NumberExpression(Double.Parse(currentToken.Text));
+
+            switch (peek(0).Type) {
+                case TokenType.Number:
+                    pos++;
+                    return new NumberExpression(Double.Parse(currentToken.Text));
+                case TokenType.LParen:
+                    pos++;
+                    Expression subExpression = expression();
+                    
+                    //TODO exception
+                    //if (peek(0).Type != TokenType.RParen)
+                    pos++;
+
+                    return subExpression;
             }
+
             //TODO Exception
             return null;
         }
