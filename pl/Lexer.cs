@@ -15,17 +15,22 @@ namespace pl {
         private int length;
         private int pos;
 
+
+
         static Lexer() {
-            operators = "+-*/()";
+            operators = "+-*/()=";
             operatorsTokenTypes = new TokenType[] {
                 TokenType.Plus,
                 TokenType.Minus,
                 TokenType.Star,
                 TokenType.Slash,
                 TokenType.LParen,
-                TokenType.RParen
+                TokenType.RParen,
+                TokenType.Eq
             };
         }
+
+
 
         public Lexer(string input) {
             this.input = input;
@@ -41,10 +46,12 @@ namespace pl {
 
                 if (char.IsDigit(currentChar))
                     tokenizeNumber();
+                else if (char.IsLetter(currentChar) || currentChar == '_')
+                    tokenizeWord();
                 else if (operators.IndexOf(currentChar) != -1)
                     tokenizeOperator();
-                else 
-                    next();
+                else
+                    pos++;
 
             }
 
@@ -54,7 +61,6 @@ namespace pl {
         private void tokenizeNumber() {
             StringBuilder sb = new StringBuilder();
 
-            
             bool hasDot = false;
             while (true) {
                 char currentChar = peek(0);
@@ -79,15 +85,24 @@ namespace pl {
             addToken(TokenType.Number, sb.ToString());
         }
 
-        private void tokenizeOperator() {
-            addToken( operatorsTokenTypes[ operators.IndexOf(peek(0)) ] );
-            next();
+        private void tokenizeWord() {
+            StringBuilder sb = new StringBuilder();
+
+            char currentChar = peek(0);
+            while (char.IsLetterOrDigit(currentChar) || currentChar == '_') {
+                sb.Append(currentChar);
+                pos++;
+                currentChar = peek(0);
+            }
+
+            addToken(TokenType.Word, sb.ToString());
         }
 
-        private char next() {
+        private void tokenizeOperator() {
+            addToken( operatorsTokenTypes[ operators.IndexOf(peek(0)) ] );
             pos++;
-            return peek(0);
         }
+
 
         private char peek(int relativePosition) {
             int position = pos + relativePosition;
@@ -101,6 +116,8 @@ namespace pl {
         private void addToken(TokenType type, string text) {
             tokens.Add(new Token(type, text));
         }
+
+
 
     }
 }

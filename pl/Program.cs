@@ -1,4 +1,5 @@
 ﻿using pl.Expressions;
+using pl.Statements;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,17 +9,21 @@ using System.Threading.Tasks;
 namespace pl {
     class Program {
         static void Main(string[] args) {
-
-            string input = "(2 + 2) * --4.5";
+            string input = "bla = (param1 + param2) * --4.5";
             Lexer lexer = new Lexer(input);
             List<Token> tokens = lexer.Tokenize();
 
+            foreach (Token token in tokens)
+                Console.WriteLine(token.ToString());
+
             Parser parser = new Parser(tokens);
-            List<Expression> expressions = parser.Parse();
+            List<Statement> statements = parser.Parse();
 
-            foreach (Expression expression in expressions)
-                Console.WriteLine(expression.ToString() + " = " + expression.Eval().ToString());
-
+            foreach (Statement statement in statements) {
+                statement.Execute();
+                Console.WriteLine(statement.ToString());
+            }
+            
             Console.ReadKey();
         }
     }

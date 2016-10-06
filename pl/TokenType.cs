@@ -7,11 +7,13 @@ using System.Threading.Tasks;
 namespace pl {
     enum TokenType {
         Number,
+        Word,
 
         Plus,
         Minus,
         Star,
         Slash,
+        Eq,
 
         LParen,
         RParen,

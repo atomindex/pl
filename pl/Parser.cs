@@ -1,4 +1,5 @@
 ﻿using pl.Expressions;
+using pl.Statements;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,16 +24,32 @@ namespace pl {
             length = tokens.Count;
         }
 
-        public List<Expression> Parse() {
-            List<Expression> expressions = new List<Expression>();
+        public List<Statement> Parse() {
+            List<Statement> expressions = new List<Statement>();
 
             while (peek(0).Type != TokenType.EOF) {
-                expressions.Add(expression());
+                expressions.Add(statement());
             }
 
             return expressions;
         }
 
+        private Statement statement() {
+            return assigmentStatement();
+        }
+
+        private Statement assigmentStatement() {
+            Token currentToken = peek(0);
+
+            if (currentToken.Type == TokenType.Word && peek(1).Type == TokenType.Eq) {
+                string variableName = currentToken.Text;
+                pos += 2;
+                Expression variableExpression = expression();
+                return new AssigmentStatement(variableName, variableExpression);
+            }
+
+            return null;
+        }
 
         private Expression expression() {
             return additive();
@@ -106,7 +123,7 @@ namespace pl {
         private Expression primary() {
             Token currentToken = peek(0);
 
-            switch (peek(0).Type) {
+            switch (currentToken.Type) {
                 case TokenType.Number:
                     pos++;
                     return new NumberExpression(Double.Parse(currentToken.Text));
@@ -119,6 +136,9 @@ namespace pl {
                     pos++;
 
                     return subExpression;
+                case TokenType.Word:
+                    pos++;
+                    return new VariableExpression(currentToken.Text);
             }
 
             //TODO Exception
