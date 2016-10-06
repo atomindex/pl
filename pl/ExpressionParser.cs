@@ -1,4 +1,5 @@
-﻿using pl.Expressions;
+﻿using pl.Exceptions;
+using pl.Expressions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -92,9 +93,10 @@ namespace pl {
                     next();
                     Expression subExpression = Parse();
 
-                    //TODO exception
-                    //if (peek(0).Type != TokenType.RParen)
-                    next();
+                    if (peek(0).Type != TokenType.RParen)
+                        next();
+                    else
+                        throw new SyntaxException("Отсутствует закрывающая скобка в строке " + peek(-1).LineNumber.ToString());
 
                     return subExpression;
                 case TokenType.Word:
@@ -102,8 +104,7 @@ namespace pl {
                     return new VariableExpression(currentToken.Text);
             }
 
-            //TODO Exception
-            return null;
+            throw new SyntaxException("Неожиданный операнд в строке " + currentToken.LineNumber.ToString());
         }
 
         private Token peek(int relativePos) {

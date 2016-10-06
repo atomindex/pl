@@ -1,4 +1,5 @@
-﻿using System;
+﻿using pl.Exceptions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,6 +8,7 @@ using System.Threading.Tasks;
 namespace pl {
     class Lexer {
 
+        private static string spaces;
         private static string operators;
         private static TokenType[] operatorsTokenTypes;
 
@@ -14,10 +16,12 @@ namespace pl {
         private List<Token> tokens;
         private int length;
         private int pos;
+        private int currentLine;
 
 
 
         static Lexer() {
+            spaces = " \t\n";
             operators = "+-*/()=";
             operatorsTokenTypes = new TokenType[] {
                 TokenType.Plus,
@@ -36,6 +40,7 @@ namespace pl {
             this.input = input;
             this.length = input.Length;
             this.tokens = new List<Token>();
+            currentLine = 1;
         }
 
         public List<Token> Tokenize() {
@@ -50,8 +55,12 @@ namespace pl {
                     tokenizeWord();
                 else if (operators.IndexOf(currentChar) != -1)
                     tokenizeOperator();
-                else
+                else if (spaces.IndexOf(currentChar) != -1) {
+                    if (currentChar == '\n')
+                        currentLine++;
                     pos++;
+                } else
+                    throw new ParsingException("Неожиданный символ " + currentChar + " в строке " + currentLine.ToString());
 
             }
 
@@ -66,9 +75,9 @@ namespace pl {
                 char currentChar = peek(0);
 
                 if (currentChar == '.') {
-                    if (hasDot) {
-                        //TODO exception
-                    } else {
+                    if (hasDot)
+                        throw new ParsingException("Неожиданный символ точки в строке " + currentLine.ToString());
+                    else {
                         if (sb.Length == 0)
                             sb.Append('0');
                         sb.Append(currentChar);
@@ -99,7 +108,7 @@ namespace pl {
 
             switch (word) {
                 case "print":
-                    addToken(TokenType.Print);
+                    addToken(TokenType.Print, word);
                     break;
                 default:
                     addToken(TokenType.Word, word);
@@ -108,7 +117,11 @@ namespace pl {
         }
 
         private void tokenizeOperator() {
-            addToken( operatorsTokenTypes[ operators.IndexOf(peek(0)) ] );
+            char currentChar = peek(0);
+            addToken( 
+                operatorsTokenTypes[ operators.IndexOf(currentChar) ], 
+                currentChar.ToString() 
+            );
             pos++;
         }
 
@@ -118,15 +131,9 @@ namespace pl {
             return position >= length ? '\0' : input[position];
         }
 
-        private void addToken(TokenType type) {
-            tokens.Add(new Token(type, ""));
-        }
-
         private void addToken(TokenType type, string text) {
-            tokens.Add(new Token(type, text));
+            tokens.Add(new Token(type, text, currentLine));
         }
-
-
 
     }
 }

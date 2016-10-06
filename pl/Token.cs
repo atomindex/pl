@@ -9,10 +9,12 @@ namespace pl {
 
         public TokenType Type; 
         public string Text;
+        public int LineNumber;
 
-        public Token(TokenType type, string text) {
+        public Token(TokenType type, string text, int lineNumber) {
             Type = type;
             Text = text;
+            LineNumber = lineNumber;
         }
 
         public override string ToString() {

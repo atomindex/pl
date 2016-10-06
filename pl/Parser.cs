@@ -1,4 +1,5 @@
-﻿using pl.Expressions;
+﻿using pl.Exceptions;
+using pl.Expressions;
 using pl.Statements;
 using System;
 using System.Collections.Generic;
@@ -18,13 +19,12 @@ namespace pl {
         }
 
         public List<Statement> Parse() {
-            List<Statement> expressions = new List<Statement>();
+            List<Statement> statements = new List<Statement>();
 
-            while (peek(0).Type != TokenType.EOF) {
-                expressions.Add(statement());
-            }
+            while (peek(0).Type != TokenType.EOF)
+                statements.Add(statement());
 
-            return expressions;
+            return statements;
         }
 
         private Statement statement() {
@@ -45,7 +45,7 @@ namespace pl {
                 return new AssigmentStatement(variableName, variableExpression);
             }
 
-            return null;
+            throw new SyntaxException("Неожиданное выражение '" + currentToken.Text + "' в строке " + currentToken.LineNumber.ToString());
         }
 
         private Token peek(int relativePos) {

@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Exceptions\ParsingException.cs" />
     <Compile Include="ExpressionParser.cs" />
     <Compile Include="Expressions\BinaryExpression.cs" />
     <Compile Include="Expressions\Expression.cs" />
@@ -55,6 +56,7 @@
     <Compile Include="Statements\AssigmentStatement.cs" />
     <Compile Include="Statements\PrintStatement.cs" />
     <Compile Include="Statements\Statement.cs" />
+    <Compile Include="Exceptions\SyntaxException.cs" />
     <Compile Include="Token.cs" />
     <Compile Include="TokenType.cs" />
     <Compile Include="Variables.cs" />

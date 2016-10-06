@@ -16,7 +16,7 @@ namespace pl {
 
 
         static ParserData() {
-            tokenEOF = new Token(TokenType.EOF, "");
+            tokenEOF = new Token(TokenType.EOF, "", 0);
         }
 
 
