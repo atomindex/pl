@@ -7,7 +7,9 @@ using System.Threading.Tasks;
 namespace pl.Statements {
     public abstract class Statement {
 
-        public abstract void Execute();
+        public abstract void Execute(bool console = true);
+
+        public abstract string GetLastResult();
 
     }
 }

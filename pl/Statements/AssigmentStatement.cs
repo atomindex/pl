@@ -18,14 +18,18 @@ namespace pl.Statements {
             this.expression = expression;
         }
 
-        public override void Execute() {
+        public override void Execute(bool console = true) {
             double result = expression.Eval();
             Variables.Set(variableName, result);
             lastResult = variableName + " = " + result.ToString();
         }
 
+        public override string GetLastResult() {
+            return lastResult;
+        }
+
         public override string ToString() {
-            return variableName + " = " + expression.ToString() + " [" + lastResult + "]";
+            return variableName + " = " + expression.ToString();
         }
 
     }

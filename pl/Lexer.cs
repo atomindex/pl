@@ -21,7 +21,7 @@ namespace pl {
 
 
         static Lexer() {
-            spaces = " \t\n";
+            spaces = " \t\r\n";
             operators = "+-*/()=";
             operatorsTokenTypes = new TokenType[] {
                 TokenType.Plus,
