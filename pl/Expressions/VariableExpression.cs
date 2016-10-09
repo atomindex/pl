@@ -1,4 +1,6 @@
-﻿namespace pl.Expressions {
+﻿using pl.Exceptions;
+
+namespace pl.Expressions {
     //Класс выражения переменной
     class VariableExpression : Expression {
 
@@ -15,6 +17,8 @@
 
         //Выполняет выражение
         public override double Eval() {
+            if (!Variables.Exists(name))
+                throw new UndefinedVariableException("Переменная " + name + " не определена");
             return Variables.Get(name);
         }
 

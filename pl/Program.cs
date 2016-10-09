@@ -143,14 +143,22 @@ namespace pl {
 
             //Выводим список команд
             if (command == "trace") {
-                PrintStatements(statements);
+                try {
+                    PrintStatements(statements);
+                } catch (Exception e) {
+                    PrintError(e.Message);
+                }
                 return;
             }
 
             //Запуск программы
             if (command == "run") {
-                foreach (Statement statement in statements)
-                    statement.Execute();
+                try {
+                    foreach (Statement statement in statements)
+                        statement.Execute();
+                } catch (Exception e) {
+                    PrintError(e.Message);
+                }
             }
         }
     }

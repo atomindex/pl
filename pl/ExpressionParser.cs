@@ -100,7 +100,7 @@ namespace pl {
                     next();
                     Expression subExpression = Parse();
 
-                    if (peek().Type != TokenType.RParen)
+                    if (peek().Type == TokenType.RParen)
                         next();
                     else
                         throw new SyntaxException("Отсутствует закрывающая скобка в строке " + peek(-1).LineNumber.ToString());

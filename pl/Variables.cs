@@ -29,5 +29,10 @@ namespace pl {
             variables[name] = value;
         }
 
+        //Определяет существование переменной
+        public static bool Exists(string name) {
+            return variables.ContainsKey(name);
+        }
+
     }
 }

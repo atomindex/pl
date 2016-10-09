@@ -1,4 +1,6 @@
-﻿namespace pl.Expressions {
+﻿using System;
+
+namespace pl.Expressions {
     //Класс бинарного выражения
     public class BinaryExpression : Expression {
 
@@ -27,7 +29,10 @@
                 case '*':
                     return expressionLeft.Eval() * expressionRight.Eval();
                 case '/':
-                    return expressionLeft.Eval() / expressionRight.Eval();
+                    double rightValue = expressionRight.Eval();
+                    if (rightValue == 0)
+                        throw new DivideByZeroException("Деление на нуль");
+                    return expressionLeft.Eval() / rightValue;
                 default:
                     return 0;
             }
