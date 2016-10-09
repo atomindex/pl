@@ -1,22 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace pl.Expressions {
+﻿namespace pl.Expressions {
+    //Класс выражения переменной
     class VariableExpression : Expression {
 
-        private string name;
+        private string name;    //Имя переменной
 
+
+
+        //Конструктор
         public VariableExpression(string name) {
             this.name = name;
         }
 
+
+
+        //Выполняет выражение
         public override double Eval() {
             return Variables.Get(name);
         }
 
+
+
+        //Возвращает строковое представление выражения
         public override string ToString() {
             return name;
         }

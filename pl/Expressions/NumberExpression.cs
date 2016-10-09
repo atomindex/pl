@@ -1,22 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace pl.Expressions {
+﻿namespace pl.Expressions {
+    //Класс выражения числа
     public class NumberExpression : Expression {
 
-        private double value;
+        private double value;       //Значение
 
+
+
+        //Конструктор
         public NumberExpression(double value) {
             this.value = value;
         }
 
+
+
+        //Выполняет выражение
         public override double Eval() {
             return value;
         }
 
+
+
+        //Возвращает строковое представление выражения
         public override string ToString() {
             return value.ToString();
         }

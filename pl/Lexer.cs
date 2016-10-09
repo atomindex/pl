@@ -1,25 +1,24 @@
 ﻿using pl.Exceptions;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace pl {
+    //Класс лексического анализатора
     class Lexer {
 
-        private static string spaces;
-        private static string operators;
-        private static TokenType[] operatorsTokenTypes;
+        private static string spaces;                    //Список символов пробелов
+        private static string operators;                 //Список символов операторов
+        private static TokenType[] operatorsTokenTypes;  //Массив типов токенов, соответсвующих операторам
 
-        private string input;
-        private List<Token> tokens;
-        private int length;
-        private int pos;
-        private int currentLine;
+        private string input;                            //Входная строка
+        private int length;                              //Длина строки
+        private int pos;                                 //Индекс текущего символа
+        private List<Token> tokens;                      //Список токенов
+        private int currentLine;                         //Номер текущей строки
 
 
 
+        //Статический конструктор
         static Lexer() {
             spaces = " \t\r\n";
             operators = "+-*/()=";
@@ -36,18 +35,22 @@ namespace pl {
 
 
 
+        //Конструктор
         public Lexer(string input) {
             this.input = input;
             this.length = input.Length;
-            this.tokens = new List<Token>();
             currentLine = 1;
         }
 
+
+
+        //Разбивает входную строку на токены и возвращает их
         public List<Token> Tokenize() {
+            tokens = new List<Token>();
+            pos = 0;
 
             while (pos < length) {
-
-                char currentChar = peek(0);
+                char currentChar = peek();
 
                 if (char.IsDigit(currentChar))
                     tokenizeNumber();
@@ -61,18 +64,18 @@ namespace pl {
                     pos++;
                 } else
                     throw new ParsingException("Неожиданный символ " + currentChar + " в строке " + currentLine.ToString());
-
             }
 
             return tokens;
         }
 
+        //Добавляет токен числа
         private void tokenizeNumber() {
             StringBuilder sb = new StringBuilder();
 
             bool hasDot = false;
             while (true) {
-                char currentChar = peek(0);
+                char currentChar = peek();
 
                 if (currentChar == '.') {
                     if (hasDot)
@@ -94,14 +97,15 @@ namespace pl {
             addToken(TokenType.Number, sb.ToString());
         }
 
+        //Добавляет токен слова
         private void tokenizeWord() {
             StringBuilder sb = new StringBuilder();
 
-            char currentChar = peek(0);
+            char currentChar = peek();
             while (char.IsLetterOrDigit(currentChar) || currentChar == '_') {
                 sb.Append(currentChar);
                 pos++;
-                currentChar = peek(0);
+                currentChar = peek();
             }
 
             string word = sb.ToString();
@@ -116,8 +120,9 @@ namespace pl {
             }
         }
 
+        //Добавляет токен оператора
         private void tokenizeOperator() {
-            char currentChar = peek(0);
+            char currentChar = peek();
             addToken( 
                 operatorsTokenTypes[ operators.IndexOf(currentChar) ], 
                 currentChar.ToString() 
@@ -125,14 +130,17 @@ namespace pl {
             pos++;
         }
 
-
-        private char peek(int relativePosition) {
-            int position = pos + relativePosition;
-            return position >= length ? '\0' : input[position];
-        }
-
+        //Добавляет токен в список
         private void addToken(TokenType type, string text) {
             tokens.Add(new Token(type, text, currentLine));
+        }
+
+
+
+        //Возвращает символ с относительным индексом
+        private char peek(int relativePosition = 0) {
+            int position = pos + relativePosition;
+            return position >= length ? '\0' : input[position];
         }
 
     }

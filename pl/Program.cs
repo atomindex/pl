@@ -1,16 +1,15 @@
 ﻿using pl.Exceptions;
-using pl.Expressions;
 using pl.Statements;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace pl {
     class Program {
 
+        //Выводит ошибку исполнения кода
         static void PrintError(string error) {
             ConsoleColor tempColor = Console.ForegroundColor;
             Console.ForegroundColor = ConsoleColor.DarkCyan;
@@ -18,6 +17,7 @@ namespace pl {
             Console.ForegroundColor = tempColor;
         }
 
+        //Выводит ошибку аргументов
         static void PrintArgumentError(string error) {
             ConsoleColor tempColor = Console.ForegroundColor;
             Console.ForegroundColor = ConsoleColor.Red;
@@ -25,19 +25,22 @@ namespace pl {
             Console.ForegroundColor = tempColor;
         }
 
+        //Выводит справку
         static void PrintHelp() {
             Console.WriteLine("help\t\t- помощь");
             Console.WriteLine("run [path]\t- запуск программы");
             Console.WriteLine("tokens [path]\t- отображение токенов");
-            Console.WriteLine("trace [path]\t- отображение вызова функций\n");
+            Console.WriteLine("trace [path]\t- отображение вызовов команд\n");
         }
 
+        //Выводит список токенов
         static void PrintTokens(List<Token> tokens) {
             foreach (Token token in tokens)
                 Console.WriteLine(token.ToString());
             Console.WriteLine("");
         }
 
+        //Выводит трассировку
         static void PrintStatements(List<Statement> statements) {
             foreach (Statement statement in statements) {
                 Console.Write(statement.ToString());
@@ -47,6 +50,9 @@ namespace pl {
             Console.WriteLine("");
         }
 
+
+
+        //Запрашивает и возвращает команду
         static string CommandQuery(string[] args) {
             string command;
             string[] commands = new string[] {
@@ -68,6 +74,7 @@ namespace pl {
             return command;
         }
 
+        //Запрашивает и возвращает путь к файлу
         static string PathQuery(string[] args) {
             string path;
 
@@ -85,6 +92,8 @@ namespace pl {
 
             return path;
         }
+
+
 
         static void Main(string[] args) {
             //Запрашиваем команду

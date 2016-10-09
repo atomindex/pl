@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace pl.Expressions {
+﻿namespace pl.Expressions {
+    //Базовый класс арифметического выражения
     public abstract class Expression {
 
+        //Выполняет выражение
         public abstract double Eval();
 
     }

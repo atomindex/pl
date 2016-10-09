@@ -1,29 +1,33 @@
 ﻿using pl.Exceptions;
 using pl.Expressions;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace pl {
+    //Класс синтаксического анализатора арифметических выражений
     class ExpressionParser {
 
-        private ParserData parserData;
+        private ParserData parserData;      //Данные парсера
 
+
+
+        //Конструктор
         public ExpressionParser(ParserData parserData) {
             this.parserData = parserData;
         }
 
+
+
+        //Возвращает выражение
         public Expression Parse() {
             return additive();
         }
 
+        //Формирует и возвращает выражение суммы и разности
         private Expression additive() {
             Expression expressionLeft = multiplicative();
 
             while (true) {
-                switch (peek(0).Type) {
+                switch (peek().Type) {
                     case TokenType.Plus:
                         next();
                         expressionLeft = new BinaryExpression('+', expressionLeft, multiplicative());
@@ -40,12 +44,13 @@ namespace pl {
             return expressionLeft;
         }
 
+        //Формирует и возвращает выражение умножени и деления
         private Expression multiplicative() {
             Expression expressionLeft = unary();
 
             while (true) {
 
-                switch (peek(0).Type) {
+                switch (peek().Type) {
                     case TokenType.Star:
                         next();
                         expressionLeft = new BinaryExpression('*', expressionLeft, unary());
@@ -62,10 +67,11 @@ namespace pl {
             return expressionLeft;
         }
 
+        //Формирует и возвращает унарные выражения
         private Expression unary() {
             Expression expression;
 
-            switch (peek(0).Type) {
+            switch (peek().Type) {
                 case TokenType.Minus:
                     next();
                     expression = new UnaryExpression('-', unary());
@@ -82,8 +88,9 @@ namespace pl {
             return expression;
         }
 
+        //Формирует и возвращает выражения чисел, переменных и подвыражения в скобках
         private Expression primary() {
-            Token currentToken = peek(0);
+            Token currentToken = peek();
 
             switch (currentToken.Type) {
                 case TokenType.Number:
@@ -93,7 +100,7 @@ namespace pl {
                     next();
                     Expression subExpression = Parse();
 
-                    if (peek(0).Type != TokenType.RParen)
+                    if (peek().Type != TokenType.RParen)
                         next();
                     else
                         throw new SyntaxException("Отсутствует закрывающая скобка в строке " + peek(-1).LineNumber.ToString());
@@ -107,10 +114,14 @@ namespace pl {
             throw new SyntaxException("Неожиданный операнд в строке " + currentToken.LineNumber.ToString());
         }
 
-        private Token peek(int relativePos) {
+
+
+        //Возвращает токен с относительным индексом
+        private Token peek(int relativePos = 0) {
             return parserData.Peek(relativePos);
         }
 
+        //Увеличивает позицию (переходит на следующий токен)
         private void next(int value = 1) {
             parserData.Pos += value;
         }

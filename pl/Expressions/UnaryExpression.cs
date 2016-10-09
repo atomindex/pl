@@ -1,20 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace pl.Expressions {
+﻿namespace pl.Expressions {
+    //Класс унарного выражения
     public class UnaryExpression : Expression {
 
-        private Expression expression;
-        private char operation;
+        private Expression expression;      //Выражение
+        private char operation;             //Оператор
 
+
+
+        //Конструктор
         public UnaryExpression(char operation, Expression expression) {
             this.expression = expression;
             this.operation = operation;
         }
 
+
+
+        //Выполняет выражение
         public override double Eval() {
             switch (operation) {
                 case '-':
@@ -25,6 +26,9 @@ namespace pl.Expressions {
             }
         }
 
+
+
+        //Возвращает строковое представление выражения
         public override string ToString() {
             return operation + expression.ToString();
         }

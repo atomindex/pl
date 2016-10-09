@@ -1,33 +1,39 @@
 ﻿using pl.Expressions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace pl.Statements {
+    //Класс команды присваивания
     public class AssigmentStatement : Statement {
 
-        private string variableName;
-        private Expression expression;
+        private string variableName;            //Название переменной
+        private Expression expression;          //Выражение
 
-        private string lastResult;
+        private string lastResult;              //Значение последнего выполнения
 
+
+
+        //Конструктор
         public AssigmentStatement(string variableName, Expression expression) {
             this.variableName = variableName;
             this.expression = expression;
         }
 
+
+
+        //Запускает команду
         public override void Execute(bool console = true) {
             double result = expression.Eval();
             Variables.Set(variableName, result);
             lastResult = variableName + " = " + result.ToString();
         }
 
+
+
+        //Возвращает результат выполнения в строковом представленнии (для трассировки)
         public override string GetLastResult() {
             return lastResult;
         }
 
+        //Возвращает строковое представление команды
         public override string ToString() {
             return variableName + " = " + expression.ToString();
         }
